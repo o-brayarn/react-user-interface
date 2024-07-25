@@ -16,6 +16,7 @@ function App() {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
   return (
     <div className="container mx-auto mt-5 font-thin">
       <h1 className="text-5xl mb-5">
@@ -28,7 +29,17 @@ function App() {
 
       <ul className="divide-y divide-gray-200">
         {appointmentList.map((appointment) => (
-          <AppointmentInfo key={appointment.id} appointment={appointment} />
+          <AppointmentInfo
+            key={appointment.id}
+            appointment={appointment}
+            onDeleteAppointment={(appointmentId) =>
+              setAppointmentList(
+                appointmentList.filter(
+                  (appointment) => appointment.id !== appointmentId
+                )
+              )
+            }
+          />
         ))}
       </ul>
     </div>
