@@ -6,6 +6,16 @@ import { useState, useCallback, useEffect } from "react";
 
 function App() {
   const [appointmentList, setAppointmentList] = useState([]);
+  const [query, setQuery] = useState("");
+
+  // Searching with a filtered array
+  const filteredAppointments = appointmentList.filter((item) => {
+    return (
+      item.petName.toLowerCase().includes(query.toLowerCase()) ||
+      item.ownerName.toLowerCase().includes(query.toLowerCase()) ||
+      item.aptNotes.toLowerCase().includes(query.toLowerCase())
+    );
+  });
 
   const fetchData = useCallback(() => {
     fetch("./data.json")
@@ -25,10 +35,10 @@ function App() {
         Appointments
       </h1>
       <AddAppointment />
-      <Search />
+      <Search onQueryChange={(myQuery) => setQuery(myQuery)} query={query} />
 
       <ul className="divide-y divide-gray-200">
-        {appointmentList.map((appointment) => (
+        {filteredAppointments.map((appointment) => (
           <AppointmentInfo
             key={appointment.id}
             appointment={appointment}
