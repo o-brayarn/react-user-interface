@@ -1,8 +1,30 @@
 import { useState } from "react";
 import { BiCalendarPlus } from "react-icons/bi";
 
-const AddAppointment = () => {
+const AddAppointment = ({ lastId, onSendAppointment }) => {
+  const clearData = {
+    ownerName: "",
+    petName: "",
+    aptDate: "",
+    aptTime: "",
+    aptNotes: "",
+  };
+
   const [toggleForm, setToggleForm] = useState(false);
+  const [formData, setFormData] = useState(clearData);
+
+  function handleSubmit() {
+    const appointmentInfo = {
+      id: lastId + 1,
+      ownerName: formData.ownerName,
+      petName: formData.petName,
+      aptDate: formData.aptDate + "" + formData.aptTime,
+      aptNotes: formData.aptNotes,
+    };
+    onSendAppointment(appointmentInfo);
+    setFormData(clearData);
+    setToggleForm(!toggleForm);
+  }
   return (
     <div>
       <button
@@ -31,7 +53,10 @@ const AddAppointment = () => {
                 type="text"
                 name="ownerName"
                 id="ownerName"
-                value=""
+                onChange={(event) => {
+                  setFormData({ ...formData, ownerName: event.target.value });
+                }}
+                value={formData.ownerName}
                 className="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
               />
             </div>
@@ -49,7 +74,10 @@ const AddAppointment = () => {
                 type="text"
                 name="petName"
                 id="petName"
-                value=""
+                onChange={(event) => {
+                  setFormData({ ...formData, petName: event.target.value });
+                }}
+                value={formData.petName}
                 className="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
               />
             </div>
@@ -67,7 +95,10 @@ const AddAppointment = () => {
                 type="date"
                 name="aptDate"
                 id="aptDate"
-                value=""
+                onChange={(event) => {
+                  setFormData({ ...formData, aptDate: event.target.value });
+                }}
+                value={formData.aptDate}
                 className="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
               />
             </div>
@@ -85,7 +116,10 @@ const AddAppointment = () => {
                 type="time"
                 name="aptTime"
                 id="aptTime"
-                value=""
+                onChange={(event) => {
+                  setFormData({ ...formData, aptTime: event.target.value });
+                }}
+                value={formData.aptTime}
                 className="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
               />
             </div>
@@ -103,7 +137,10 @@ const AddAppointment = () => {
                 id="aptNotes"
                 name="aptNotes"
                 rows="3"
-                value=""
+                onChange={(event) => {
+                  setFormData({ ...formData, aptNotes: event.target.value });
+                }}
+                value={formData.aptNotes}
                 className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md"
                 placeholder="Detailed comments about the condition"
               ></textarea>
@@ -113,6 +150,7 @@ const AddAppointment = () => {
           <div className="pt-5">
             <div className="flex justify-end">
               <button
+                onClick={handleSubmit}
                 type="submit"
                 className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-400 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400"
               >
